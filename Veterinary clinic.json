@@ -1,0 +1,530 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "0.0.1",
+    "title": "OpenAPI спецификация вет. клиники",
+    "license": {
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+      "name": "Apache 2.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api/v1/",
+      "description": "Dev server"
+    }
+  ],
+  "paths": {
+    "/pets": {
+      "get": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Метод получения питомцев",
+        "description": "Метод предназначен для получения списка всех питомцев.",
+        "operationId": "getpets",
+        "parameters": [
+          {
+            "name": "HaveOwner",
+            "in": "query",
+            "description": "1 - имеет владельца, 0 - нет",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список питомцев",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/pets"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Любая неожиданная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      }
+    },
+    "/pet/{id}": {
+      "get": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Метод получения питомца по идентификатору",
+        "description": "Метод получения питомца по идентификатору",
+        "operationId": "getpetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор питомца",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Питомец",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/pet"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Любая неожиданная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Метод обновления питомца в каталоге",
+        "description": "Метод предназначен для обновления в БД данных по имеющимуся питомцу.",
+        "operationId": "updatepet",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор питомца",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/pet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Подтверждение успешного обновления",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/pet"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные входные данные. Возвращает список атрибутов с ошибками",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Любая неожиданная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Метод удаления питомца по идентификатору",
+        "operationId": "deletepetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор питомца",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "default": {
+            "description": "Любая неожиданная ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      }
+    },
+    "/pets/{Owner_id}": {
+      "get": {
+        "tags": [
+          "owner"
+        ],
+        "summary": "Метод получения списка питомцев владельца",
+        "description": "Метод получения списка питомцев владельца",
+        "operationId": "getOwnerPets",
+        "parameters": [
+          {
+            "name": "Owner_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Питомцы",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/pets"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Нет данных",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      }
+    },
+    "/owners": {
+      "get": {
+        "summary": "Метод предназначен для получения списка всех владельцев",
+        "description": "Метод предназначен для получения списка всех владельцев.",
+        "operationId": "getOwners",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/owners"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      }
+    },
+    "/owner": {
+      "get": {
+        "summary": "Метод получения информации о владельце",
+        "description": "Метод получения информации о владельце по ID",
+        "operationId": "getOwnerbyId",
+        "responses": {
+          "200": {
+            "description": "Владелец",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/owner"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Нет данных",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      },
+      "put": {
+        "summary": "",
+        "description": "Метод предназначен для обновления в БД данных по владельцу.",
+        "operationId": "updateowner",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/owner"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/owner"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "description": "",
+        "operationId": "deleteOwnerbyID",
+        "responses": {
+          "200": {
+            "description": "Успешное удаление"
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8080/api/v1/",
+            "description": "Dev server"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "pets": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/pet"
+        }
+      },
+      "pet": {
+        "type": "object",
+        "properties": {
+          "pet_id": {
+            "type": "string",
+            "description": "id питомца",
+            "example": "42abcd2b-8b9c-4af9-88f7-0bc180cf74b4"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название питомца",
+            "example": "Bobik"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Дата и время сохранения питомца в каталоге",
+            "format": "date"
+          },
+          "Pet_type": {
+            "enum": [
+              "Cat",
+              "Dog",
+              "Parrot"
+            ],
+            "description": "Вид питомца (собака, кошка)"
+          },
+          "owner_id": {
+            "$ref": "#/components/schemas/owner"
+          },
+          "note": {
+            "type": "string",
+            "description": "Болезни",
+            "example": "Перелом правой передней лапы"
+          },
+          "haveOwner": {
+            "type": "boolean",
+            "description": "Наличие владельца",
+            "default": true,
+            "x-deprecated": true
+          }
+        },
+        "required": [
+          "name",
+          "created_at",
+          "Pet_type",
+          "owner_id",
+          "haveOwner"
+        ]
+      },
+      "owner": {
+        "type": "object",
+        "title": "owner",
+        "description": "Данные по клиенту",
+        "properties": {
+          "owner_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "ФИО владельца",
+            "example": "Иванов Иван Иванович"
+          },
+          "Dateofbirth": {
+            "type": "string",
+            "description": "Дата рождения владельца",
+            "format": "date-time"
+          },
+          "phone": {
+            "type": "number",
+            "description": "Телефон владельца"
+          },
+          "email": {
+            "type": "string",
+            "description": "email владельца",
+            "format": "email"
+          },
+          "pets": {
+            "$ref": "#/components/schemas/pets"
+          }
+        },
+        "required": [
+          "name",
+          "phone",
+          "pets"
+        ],
+        "x-extension-1": null
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "owners": {
+        "type": "array",
+        "title": "owners",
+        "items": {
+          "$ref": "#/components/schemas/owner"
+        }
+      }
+    }
+  }
+}
